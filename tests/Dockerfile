@@ -1,11 +1,29 @@
-FROM python:3.10
+name: CI Pipeline
 
-WORKDIR /app
+on:
+  push:
+    branches: [ main ]
 
-COPY requirements.txt .
+jobs:
+  build:
 
-RUN pip install -r requirements.txt
+    runs-on: ubuntu-latest
 
-COPY . .
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-CMD ["python", "-m", "pytest", "tests/"]
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build Docker Image
+      run: docker build -t ridaelq/tp3:latest .
+
+    - name: Push Image to Docker Hub
+      run: docker push ridaelq/tp3:latest
+
+    - name: Run Tests
+      run: docker run ridaelq/tp3:latest
