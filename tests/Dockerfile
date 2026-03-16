@@ -27,3 +27,9 @@ jobs:
 
     - name: Run Tests
       run: docker run ridaelq/tp3:latest
+
+      Name: DOCKER_USERNAME
+      Value: ridaelq
+
+      name: DOCKER_PASSWORD
+      value: ridamks123@krifi
